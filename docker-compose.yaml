@@ -71,7 +71,7 @@ services:
       POSTGRES_USER: 'dam_user'
       POSTGRES_PASSWORD: 'password'
     volumes:
-      - ./docker/postgres/db-master:/var/lib/postgresql/data
+      - ./docker/postgres/pg-master:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 

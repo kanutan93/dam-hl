@@ -14,7 +14,7 @@ public interface ImageService {
 
   void uploadImage(MultipartFile file);
 
-  void saveImageCategory(Integer id, String category, Double categoryMatchResult);
+  void updateImageCategory(Integer id, String category, Double categoryMatchResult);
 
   void deleteImage(Integer id);
 }

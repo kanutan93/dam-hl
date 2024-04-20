@@ -18,7 +18,7 @@ public class ImageWithCategoryKafkaListener {
   private final ImageService imageService;
   private final ObjectMapper objectMapper;
 
-  @KafkaListener(topics = "${spring.kafka.topic}")
+  @KafkaListener(topics = "${kafka.saving-new-image-category-topic}")
   @SneakyThrows
   public void consume(ConsumerRecord<String, String> record) {
     String payload = record.value();
@@ -28,9 +28,16 @@ public class ImageWithCategoryKafkaListener {
     Integer id = imageWithCategoryPayload.getId();
     String category = imageWithCategoryPayload.getCategory();
     Double categoryMatchResult = imageWithCategoryPayload.getCategoryMatchResult();
+    ImageWithCategoryPayload.Action action = imageWithCategoryPayload.getAction();
 
-    imageService.saveImageCategory(id, category, categoryMatchResult);
+    switch (action)  {
+      case UPDATE:
+        imageService.updateImageCategory(id, category, categoryMatchResult);
+        break;
+      case DELETE:
+        imageService.deleteImage(id);
+    }
 
-    log.info("Message has been received successfully", payload);
+    log.info("Message has been received successfully");
   }
 }

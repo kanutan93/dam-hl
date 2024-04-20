@@ -23,6 +23,7 @@ public class ImageRepositoryImpl implements ImageRepository {
   @Override
   public List<ImageDao> getImages() {
     return jdbcTemplate.query("SELECT * FROM images " +
+            "WHERE category IS NOT NULL " +
             "LIMIT 1000",
         new ImageDaoRowMapper());
   }

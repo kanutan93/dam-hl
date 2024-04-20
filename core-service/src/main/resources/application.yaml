@@ -23,7 +23,6 @@ spring:
     password: ${REDIS_PASSWORD:password}
     timeout: ${REDIS_TIMEOUT:2000}
   kafka:
-    topic: ${KAFKA_TOPIC:posts}
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29091}
     consumer:
       group-id: ${KAFKA_CONSUMER_GROUP_ID:images}
@@ -31,3 +30,7 @@ spring:
 management:
   endpoints.web.exposure.include: prometheus
   metrics.distribution.percentiles-histogram.http.server.requests: true
+
+kafka:
+  adding-new-image-topic: ${PRODUCE_ADDING_NEW_IMAGE_TOPIC:adding-new-image-topic}
+  saving-new-image-category-topic: ${LISTEN_SAVING_NEW_IMAGE_CATEGORY_TOPIC:saving-new-image-category-topic}

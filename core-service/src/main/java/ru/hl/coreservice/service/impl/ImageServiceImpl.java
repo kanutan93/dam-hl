@@ -5,6 +5,7 @@ import io.micrometer.core.instrument.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -14,12 +15,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hl.coreservice.aop.ReadOnlyConnection;
+import ru.hl.coreservice.kafka.payload.ImagePayload;
 import ru.hl.coreservice.mapper.image.ImageMapper;
 import ru.hl.coreservice.model.dao.ImageDao;
 import ru.hl.coreservice.model.dto.response.ImageResponseDto;
 import ru.hl.coreservice.repository.ImageRepository;
 import ru.hl.coreservice.service.ImageService;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,6 +36,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
 
+  private static final String IMAGES_FOLDER = "/opt/images/";
   private static final String IMAGES_CACHE = "imagesCache";
   private final ImageRepository imageRepository;
   private final ImageMapper imageMapper;
@@ -36,8 +44,8 @@ public class ImageServiceImpl implements ImageService {
   private final ObjectMapper objectMapper;
   private final CacheManager cacheManager;
 
-  @Value("${spring.kafka.topic}")
-  private String kafkaTopic;
+  @Value("${kafka.adding-new-image-topic}")
+  private String addingNewImageTopic;
 
   @Override
   @ReadOnlyConnection
@@ -75,28 +83,35 @@ public class ImageServiceImpl implements ImageService {
     log.info("Trying to download image with id: {}", id);
 
     ImageDao image = imageRepository.getImageById(id);
-    //TODO get InputStream for file
+    File file = new File(IMAGES_FOLDER + image.getFilename());
+    FileInputStream inputStream = new FileInputStream(file);
 
     log.info("Image with id: {} has been successfully downloaded", id);
 
-    return new InputStreamResource(null);
+    return new InputStreamResource(inputStream);
   }
 
   @Override
   @Transactional
+  @SneakyThrows
   public void uploadImage(MultipartFile file) {
     String filename = file.getOriginalFilename();
     log.info("Trying to upload image with filename: {}", filename);
 
-    imageRepository.createImage(filename);
-    //TODO saving image
+    int id = imageRepository.createImage(filename);
+    try (InputStream inputStream = file.getInputStream();) {
+      File dest = new File(IMAGES_FOLDER + filename);
+      FileUtils.copyInputStreamToFile(inputStream, dest);
+    }
+    ImagePayload imagePayload = new ImagePayload(id, filename);
+    kafkaTemplate.send(addingNewImageTopic, objectMapper.writeValueAsString(imagePayload));
 
     log.info("Image with filename: {} was successfully uploaded", filename);
   }
 
   @Override
   @Transactional
-  public void saveImageCategory(Integer id, String category, Double categoryMatchResult) {
+  public void updateImageCategory(Integer id, String category, Double categoryMatchResult) {
     log.info("Trying to update image with id: {}, category: {}, categoryMatchResult: {}", id, category, categoryMatchResult);
 
     imageRepository.updateImage(id, category, categoryMatchResult);
