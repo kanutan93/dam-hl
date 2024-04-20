@@ -17,7 +17,7 @@ import java.util.List;
 public interface ImageController {
 
   @GetMapping("/list")
-  ResponseEntity<List<ImageResponseDto>> getImages(@RequestParam String category);
+  ResponseEntity<List<ImageResponseDto>> getImages(@RequestParam(required = false) String category);
 
   @GetMapping("/download/{id}")
   ResponseEntity<InputStreamResource> downloadImage(@PathVariable Integer id);

@@ -11,8 +11,8 @@ spring:
         username: ${MASTER_DB_USER:dam_user}
         password: ${MASTER_DB_PASSWORD:password}
       slave:
-        readonly-slave-enabled: ${READ_ONLY_SLAVE_ENABLED:false}
-        url: ${SLAVE_DB_URL:jdbc:postgresql://localhost:5433/dam}
+        readonly-slave-enabled: ${READ_ONLY_SLAVE_ENABLED:true}
+        url: ${SLAVE_DB_URL:jdbc:postgresql://localhost:5000/dam}
         username: ${SLAVE_DB_USER:dam_user}
         password: ${SLAVE_DB_PASSWORD:password}
       liquibase:

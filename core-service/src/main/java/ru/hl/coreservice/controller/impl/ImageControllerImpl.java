@@ -30,13 +30,12 @@ public class ImageControllerImpl implements ImageController {
   @Override
   @SneakyThrows
   public ResponseEntity<InputStreamResource> downloadImage(Integer id) {
-    InputStreamResource isr = imageService.downloadImage(id);
+    ImageResponseDto image = imageService.getImage(id);
+    var is = imageService.downloadImage(id);
     HttpHeaders respHeaders = new HttpHeaders();
-    //TODO save content type to db and use it here
-    respHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-    respHeaders.setContentLength(isr.contentLength());
-    respHeaders.setContentDispositionFormData("attachment", isr.getFilename());
-    return new ResponseEntity<>(isr, respHeaders, HttpStatus.OK);
+    respHeaders.setContentType(MediaType.IMAGE_JPEG);
+    respHeaders.setContentDispositionFormData("attachment", image.getFilename());
+    return new ResponseEntity<>(new InputStreamResource(is), respHeaders, HttpStatus.OK);
   }
 
   @Override

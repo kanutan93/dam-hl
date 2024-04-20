@@ -9,7 +9,6 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,9 +23,7 @@ import ru.hl.coreservice.service.ImageService;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,7 +33,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
 
-  private static final String IMAGES_FOLDER = "/opt/images/";
+  private static final String IMAGES_FOLDER = "/tmp/images/";
   private static final String IMAGES_CACHE = "imagesCache";
   private final ImageRepository imageRepository;
   private final ImageMapper imageMapper;
@@ -77,9 +74,24 @@ public class ImageServiceImpl implements ImageService {
   }
 
   @Override
+  @ReadOnlyConnection
+  @Transactional(readOnly = true)
+  public ImageResponseDto getImage(Integer id) {
+    log.info("Trying to get image by id: {}", id);
+
+    ImageDao imageDao = imageRepository.getImageById(id);
+    ImageResponseDto image = imageMapper.toImageResponseDto(imageDao);
+
+    log.info("Image was successfully received by id: {}", id);
+
+    return image;
+  }
+
+  @Override
   @SneakyThrows
-  @Transactional
-  public InputStreamResource downloadImage(Integer id) {
+  @ReadOnlyConnection
+  @Transactional(readOnly = true)
+  public InputStream downloadImage(Integer id) {
     log.info("Trying to download image with id: {}", id);
 
     ImageDao image = imageRepository.getImageById(id);
@@ -88,7 +100,7 @@ public class ImageServiceImpl implements ImageService {
 
     log.info("Image with id: {} has been successfully downloaded", id);
 
-    return new InputStreamResource(inputStream);
+    return inputStream;
   }
 
   @Override
@@ -106,7 +118,7 @@ public class ImageServiceImpl implements ImageService {
     ImagePayload imagePayload = new ImagePayload(id, filename);
     kafkaTemplate.send(addingNewImageTopic, objectMapper.writeValueAsString(imagePayload));
 
-    log.info("Image with filename: {} was successfully uploaded", filename);
+    log.info("Image with id: {}, filename: {} was successfully uploaded", id, filename);
   }
 
   @Override
