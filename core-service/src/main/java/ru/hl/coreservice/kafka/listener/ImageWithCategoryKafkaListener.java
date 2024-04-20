@@ -1,4 +1,4 @@
-package ru.hl.primaryservice.kafka.listener;
+package ru.hl.coreservice.kafka.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -7,8 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import ru.hl.primaryservice.kafka.payload.ImageWithCategoryPayload;
-import ru.hl.primaryservice.service.ImageService;
+import ru.hl.coreservice.kafka.payload.ImageWithCategoryPayload;
+import ru.hl.coreservice.service.ImageService;
 
 @Slf4j
 @Component

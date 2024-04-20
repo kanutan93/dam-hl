@@ -6,18 +6,10 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
     <changeSet id="0.init-schema-1" author="Dmitry Morozov">
-        <comment>Create table users</comment>
-        <sqlFile path="users.sql" relativeToChangelogFile="true"/>
+        <comment>Create table images</comment>
+        <sqlFile path="images.sql" relativeToChangelogFile="true"/>
         <rollback>
-            DROP TABLE users;
-        </rollback>
-    </changeSet>
-
-    <changeSet id="0.init-schema-2" author="Dmitry Morozov">
-        <comment>Create table friends</comment>
-        <sqlFile path="friends.sql" relativeToChangelogFile="true"/>
-        <rollback>
-            DROP TABLE friends;
+            DROP TABLE images;
         </rollback>
     </changeSet>
 

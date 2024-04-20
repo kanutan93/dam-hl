@@ -1,4 +1,4 @@
-package ru.hl.primaryservice.util;
+package ru.hl.coreservice.util;
 
 import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;

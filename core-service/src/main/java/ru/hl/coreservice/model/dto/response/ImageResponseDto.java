@@ -1,4 +1,4 @@
-package ru.hl.primaryservice.model.dto.response;
+package ru.hl.coreservice.model.dto.response;
 
 import lombok.Data;
 

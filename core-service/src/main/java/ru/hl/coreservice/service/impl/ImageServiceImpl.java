@@ -1,4 +1,4 @@
-package ru.hl.primaryservice.service.impl;
+package ru.hl.coreservice.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.core.instrument.util.StringUtils;
@@ -13,12 +13,12 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import ru.hl.primaryservice.aop.ReadOnlyConnection;
-import ru.hl.primaryservice.mapper.post.ImageMapper;
-import ru.hl.primaryservice.model.dao.ImageDao;
-import ru.hl.primaryservice.model.dto.response.ImageResponseDto;
-import ru.hl.primaryservice.repository.ImageRepository;
-import ru.hl.primaryservice.service.ImageService;
+import ru.hl.coreservice.aop.ReadOnlyConnection;
+import ru.hl.coreservice.mapper.image.ImageMapper;
+import ru.hl.coreservice.model.dao.ImageDao;
+import ru.hl.coreservice.model.dto.response.ImageResponseDto;
+import ru.hl.coreservice.repository.ImageRepository;
+import ru.hl.coreservice.service.ImageService;
 
 import java.util.List;
 import java.util.Optional;

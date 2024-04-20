@@ -1,7 +1,6 @@
-package ru.hl.coreservice.mapper.post;
+package ru.hl.coreservice.mapper.image;
 
 import org.mapstruct.Mapper;
-import ru.hl.coreservice.kafka.payload.ImageWithCategoryPayload;
 import ru.hl.coreservice.model.dao.ImageDao;
 import ru.hl.coreservice.model.dto.response.ImageResponseDto;
 
@@ -9,6 +8,4 @@ import ru.hl.coreservice.model.dto.response.ImageResponseDto;
 public interface ImageMapper {
 
   ImageResponseDto toImageResponseDto(ImageDao imageDao);
-
-  ImageWithCategoryPayload toPostPayload(Integer receiverUserId, ImageWithCategoryPayload.Action action, ImageResponseDto imageResponseDto);
 }

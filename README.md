@@ -1,4 +1,4 @@
-# ДЗ по курсу Highload Architect
+# Курсовая работа по теме "Разработка высоконагруженной системы хранения цифрового контента и распознавания образов."
 
 ### Запуск приложения:
 #### Docker:
@@ -16,8 +16,5 @@ docker-compose up
 ```shell
 mvn clean install
 
-java -jar target/social-network-0.0.1-SNAPSHOT.jar
-```
-
-### Тестирование API:
-Для ручного тестирования API необходимо импортировать social-network-morozov.postman_collection.json в Postman 
+java -jar target/core-network-0.0.1-SNAPSHOT.jar
+``` 

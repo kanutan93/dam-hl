@@ -1,4 +1,4 @@
-package ru.hl.primaryservice.aop;
+package ru.hl.coreservice.aop;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

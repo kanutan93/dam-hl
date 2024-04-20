@@ -1,4 +1,4 @@
-package ru.hl.primaryservice.controller.impl;
+package ru.hl.coreservice.controller.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -9,9 +9,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import ru.hl.primaryservice.controller.ImageController;
-import ru.hl.primaryservice.model.dto.response.ImageResponseDto;
-import ru.hl.primaryservice.service.ImageService;
+import ru.hl.coreservice.controller.ImageController;
+import ru.hl.coreservice.model.dto.response.ImageResponseDto;
+import ru.hl.coreservice.service.ImageService;
 
 import java.util.List;
 

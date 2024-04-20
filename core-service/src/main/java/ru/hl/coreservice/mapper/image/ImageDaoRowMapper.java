@@ -1,4 +1,4 @@
-package ru.hl.coreservice.mapper.post;
+package ru.hl.coreservice.mapper.image;
 
 import org.springframework.jdbc.core.RowMapper;
 import ru.hl.coreservice.model.dao.ImageDao;

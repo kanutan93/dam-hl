@@ -1,4 +1,4 @@
-package ru.hl.primaryservice.config;
+package ru.hl.coreservice.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import liquibase.integration.spring.SpringLiquibase;
@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static ru.hl.primaryservice.util.LiquibaseConfigUtil.getSpringLiquibase;
+import static ru.hl.coreservice.util.LiquibaseConfigUtil.getSpringLiquibase;
 
 @Configuration
 public class DataSourceConfig {

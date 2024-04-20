@@ -1,4 +1,4 @@
-package ru.hl.primaryservice.kafka.payload;
+package ru.hl.coreservice.kafka.payload;
 
 import lombok.Data;
 

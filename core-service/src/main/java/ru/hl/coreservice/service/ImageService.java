@@ -1,11 +1,9 @@
-package ru.hl.primaryservice.service;
+package ru.hl.coreservice.service;
 
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import ru.hl.primaryservice.model.dto.response.ImageResponseDto;
+import ru.hl.coreservice.model.dto.response.ImageResponseDto;
 
-import java.io.InputStream;
 import java.util.List;
 
 public interface ImageService {

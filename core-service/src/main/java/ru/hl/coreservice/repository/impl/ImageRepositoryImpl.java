@@ -1,13 +1,13 @@
-package ru.hl.primaryservice.repository.impl;
+package ru.hl.coreservice.repository.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
-import ru.hl.primaryservice.mapper.post.ImageDaoRowMapper;
-import ru.hl.primaryservice.model.dao.ImageDao;
-import ru.hl.primaryservice.repository.ImageRepository;
+import ru.hl.coreservice.mapper.image.ImageDaoRowMapper;
+import ru.hl.coreservice.model.dao.ImageDao;
+import ru.hl.coreservice.repository.ImageRepository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;

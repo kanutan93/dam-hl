@@ -1,4 +1,4 @@
-package ru.hl.primaryservice.model.dao;
+package ru.hl.coreservice.model.dao;
 
 import lombok.Data;
 

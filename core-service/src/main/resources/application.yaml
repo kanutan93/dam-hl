@@ -1,23 +1,22 @@
 spring:
+  servlet:
+    multipart:
+      file-size-threshold: 2KB
+      max-file-size: 20MB
+      max-request-size: 20MB
   datasource:
     primary:
       master:
-        url: ${MASTER_DB_URL:jdbc:postgresql://localhost:5432/social_network}
-        username: ${MASTER_DB_USER:social_network_user}
+        url: ${MASTER_DB_URL:jdbc:postgresql://localhost:5432/dam}
+        username: ${MASTER_DB_USER:dam_user}
         password: ${MASTER_DB_PASSWORD:password}
       slave:
         readonly-slave-enabled: ${READ_ONLY_SLAVE_ENABLED:false}
-        url: ${SLAVE_DB_URL:jdbc:postgresql://localhost:5433/social_network}
-        username: ${SLAVE_DB_USER:social_network_user}
+        url: ${SLAVE_DB_URL:jdbc:postgresql://localhost:5433/dam}
+        username: ${SLAVE_DB_USER:dam_user}
         password: ${SLAVE_DB_PASSWORD:password}
       liquibase:
-        change-log: classpath:/db/changelog/primary/changelog-master.xml
-    dialog:
-      url: ${DIALOG_DB_URL:jdbc:postgresql://localhost:5435/social_network_dialog}
-      username: ${DIALOG_DB_USER:social_network_dialog_user}
-      password: ${DIALOG_DB_PASSWORD:password}
-      liquibase:
-        change-log: classpath:/db/changelog/dialog/changelog-master.xml
+        change-log: classpath:/db/changelog/changelog-master.xml
   redis:
     host: ${REDIS_HOST:localhost}
     port: ${REDIS_PORT:6379}
@@ -27,7 +26,7 @@ spring:
     topic: ${KAFKA_TOPIC:posts}
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29091}
     consumer:
-      group-id: ${KAFKA_CONSUMER_GROUP_ID:social_network}
+      group-id: ${KAFKA_CONSUMER_GROUP_ID:images}
       auto-offset-reset: earliest
 management:
   endpoints.web.exposure.include: prometheus

@@ -1,4 +1,4 @@
-package ru.hl.primaryservice.aop;
+package ru.hl.coreservice.aop;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -9,9 +9,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
-import static ru.hl.primaryservice.config.DataSourceConfig.DataSourceTypes.SLAVE;
-import static ru.hl.primaryservice.config.DataSourceConfig.DataSourceTypeContextHolder.clearDataSourceType;
-import static ru.hl.primaryservice.config.DataSourceConfig.DataSourceTypeContextHolder.setDataSourceType;
+import static ru.hl.coreservice.config.DataSourceConfig.DataSourceTypes.SLAVE;
+import static ru.hl.coreservice.config.DataSourceConfig.DataSourceTypeContextHolder.clearDataSourceType;
+import static ru.hl.coreservice.config.DataSourceConfig.DataSourceTypeContextHolder.setDataSourceType;
 
 @Aspect
 @Component

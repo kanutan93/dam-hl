@@ -35,7 +35,7 @@ services:
       LISTEN_SAVING_NEW_IMAGE_CATEGORY_TOPIC: 'saving-new-image-category-topic'
 
   image-processing-service:
-    image: kanutan93/counter-service:1.0.4
+    image: kanutan93/image-processing-service:1.0.1
     deploy:
       mode: replicated
       replicas: 3

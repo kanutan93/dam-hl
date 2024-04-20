@@ -1,4 +1,4 @@
-package ru.hl.primaryservice;
+package ru.hl.coreservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

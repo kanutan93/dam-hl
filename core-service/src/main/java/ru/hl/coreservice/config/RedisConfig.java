@@ -1,4 +1,4 @@
-package ru.hl.primaryservice.config;
+package ru.hl.coreservice.config;
 
 import java.time.Duration;
 

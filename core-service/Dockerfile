@@ -7,7 +7,7 @@ RUN mvn clean install -DskipTests
 
 FROM openjdk:11-jre AS run
 
-COPY --from=build target/primary-service-*.jar primary-service.jar
+COPY --from=build target/core-service-*.jar core-service.jar
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "./primary-service.jar"]
+ENTRYPOINT ["java", "-jar", "./core-service.jar"]

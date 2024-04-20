@@ -1,7 +1,7 @@
-package ru.hl.primaryservice.repository;
+package ru.hl.coreservice.repository;
 
 
-import ru.hl.primaryservice.model.dao.ImageDao;
+import ru.hl.coreservice.model.dao.ImageDao;
 
 import java.util.List;
 

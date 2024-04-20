@@ -1,4 +1,4 @@
-package ru.hl.primaryservice.controller;
+package ru.hl.coreservice.controller;
 
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import ru.hl.primaryservice.model.dto.response.ImageResponseDto;
+import ru.hl.coreservice.model.dto.response.ImageResponseDto;
 
 import java.util.List;
 
