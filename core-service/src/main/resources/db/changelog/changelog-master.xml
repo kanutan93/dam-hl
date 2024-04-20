@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+  <include file="db/changelog/primary/0.init-schema.xml"/>
+  <include file="db/changelog/primary/1.add-unique-sender_id-receiver_id.xml"/>
+  <include file="db/changelog/primary/2.insert-users.xml"/>
+  <include file="db/changelog/primary/3.add-index-users-firstname-lastname.xml"/>
+  <include file="db/changelog/primary/4.create-table-post.xml"/>
+</databaseChangeLog>

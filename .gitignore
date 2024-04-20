@@ -1,0 +1,48 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+###Docker mounted volume
+docker/
+!docker/haproxy/
+!docker/prometheus/
+!docker/nginx/
+!docker/postgres/db-master/pg_hba.conf
+!docker/postgres/db-master/postgresql.conf
+!docker/postgres/db-slave1/pg_hba.conf
+!docker/postgres/db-slave1/postgresql.conf
+!docker/postgres/db-slave1/standby.signal
+!docker/postgres/db-slave2/pg_hba.conf
+!docker/postgres/db-slave2/postgresql.conf
+!docker/postgres/db-slave2/standby.signal
+

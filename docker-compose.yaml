@@ -1,0 +1,177 @@
+version: '3.5'
+services:
+
+  nginx:
+    build: docker/nginx
+    ports:
+      - "8080:80"
+    networks:
+      - service
+    depends_on:
+      - core-service
+
+  core-service:
+    image: kanutan93/core-service:1.0.1
+    deploy:
+      mode: replicated
+      replicas: 3
+    networks:
+      - service
+    restart: always
+    environment:
+      MASTER_DB_URL: 'jdbc:postgresql://pg-master:5432/dam'
+      MASTER_DB_USER: 'dam_user'
+      MASTER_DB_PASSWORD: 'password'
+      READ_ONLY_SLAVE_ENABLED: 'true'
+      SLAVE_DB_URL: 'jdbc:postgresql://haproxy:5000/dam'
+      SLAVE_DB_USER: 'dam_user'
+      SLAVE_DB_PASSWORD: 'password'
+      REDIS_HOST: 'redis'
+      REDIS_PORT: '6379'
+      REDIS_PASSWORD: 'password'
+      KAFKA_BOOTSTRAP_SERVERS: 'kafka:9091'
+      KAFKA_CONSUMER_GROUP_ID: 'core-service'
+      PRODUCE_ADDING_NEW_IMAGE_TOPIC: 'adding-new-image-topic'
+      LISTEN_SAVING_NEW_IMAGE_CATEGORY_TOPIC: 'saving-new-image-category-topic'
+
+  image-processing-service:
+    image: kanutan93/counter-service:1.0.4
+    deploy:
+      mode: replicated
+      replicas: 3
+    networks:
+      - service
+    restart: always
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: 'kafka:9091'
+      KAFKA_CONSUMER_GROUP_ID: 'image-processing-service'
+      LISTEN_ADDING_NEW_IMAGE_TOPIC: 'adding-new-image-topic'
+      PRODUCE_SAVING_NEW_IMAGE_CATEGORY_TOPIC: 'saving-new-image-category-topic'
+
+  haproxy:
+    image: haproxy
+    networks:
+      - service
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./docker/haproxy:/usr/local/etc/haproxy
+    depends_on:
+      - pg-slave-1
+      - pg-slave-2
+
+  pg-master:
+    container_name: pg-master
+    image: postgres
+    networks:
+      - service
+    restart: always
+    environment:
+      POSTGRES_DB: 'dam'
+      POSTGRES_USER: 'dam_user'
+      POSTGRES_PASSWORD: 'password'
+    volumes:
+      - ./docker/postgres/db-master:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  pg-slave-1:
+    container_name: pg-slave-1
+    image: postgres
+    networks:
+      - service
+    restart: always
+    environment:
+      POSTGRES_DB: 'dam'
+      POSTGRES_USER: 'dam_user'
+      POSTGRES_PASSWORD: 'password'
+    volumes:
+      - ./docker/postgres/pg-slave-1:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    depends_on:
+      - pg-master
+
+  pg-slave-2:
+    container_name: pg-slave-2
+    image: postgres
+    networks:
+      - service
+    restart: always
+    environment:
+      POSTGRES_DB: 'dam'
+      POSTGRES_USER: 'dam_user'
+      POSTGRES_PASSWORD: 'password'
+    volumes:
+      - ./docker/postgres/pg-slave-2:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    depends_on:
+      - pg-master
+
+  redis:
+    container_name: redis
+    image: redis
+    networks:
+      - service
+    restart: always
+    environment:
+      REDIS_PASSWORD: 'password'
+    ports:
+      - "6379:6379"
+
+  zookeeper:
+    container_name: zookeeper
+    image: confluentinc/cp-zookeeper:latest
+    networks:
+      - service
+    restart: always
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - "2181:2181"
+
+  kafka:
+    container_name: kafka
+    image: confluentinc/cp-kafka:latest
+    networks:
+      - service
+    restart: always
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://hl-kafka:9091,PLAINTEXT_INTERNAL://localhost:29091
+      KAFKA_ZOOKEEPER_CONNECT: hl-zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+    ports:
+      - "9091:9091"
+      - "29091:29091"
+    depends_on:
+      - zookeeper
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+    networks:
+      - monitoring
+      - service
+    ports:
+      - '9090:9090'
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    networks:
+      - monitoring
+    restart: always
+    ports:
+      - '3000:3000'
+
+networks:
+  service:
+    driver: bridge
+  monitoring:
+    driver: bridge
+
+volumes:
+  healthcheck-volume:

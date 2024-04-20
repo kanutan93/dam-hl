@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="0.init-schema-1" author="Dmitry Morozov">
+        <comment>Create table users</comment>
+        <sqlFile path="users.sql" relativeToChangelogFile="true"/>
+        <rollback>
+            DROP TABLE users;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0.init-schema-2" author="Dmitry Morozov">
+        <comment>Create table friends</comment>
+        <sqlFile path="friends.sql" relativeToChangelogFile="true"/>
+        <rollback>
+            DROP TABLE friends;
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
