@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 
 from kafka import KafkaConsumer, KafkaProducer
@@ -31,7 +32,7 @@ def process_image(record_value):
     if id:
         image_with_category_payload = {}
         try:
-            print(f"Trying to handle new ImagePayload with id: {id} and {filename}")
+            logging.info(f"Trying to handle new ImagePayload with id: {id} and {filename}")
             img = read_image(f"{IMAGE_DIRECTORY}/{filename}")
 
             # Step 1: Initialize the inference transforms
@@ -51,11 +52,11 @@ def process_image(record_value):
                 'categoryMatchResult': 100 * score,
                 'action': 'UPDATE'
             }
-            print(f"ImagePayload with id: {id} and {filename} has been handled successfully with result "
+            logging.info(f"ImagePayload with id: {id} and {filename} has been handled successfully with result "
                   f"{category_name}: {100 * score:.1f}%")
         except Exception as e:
-            print(f"Error on handling ImagePayload with id: {id} and {filename}")
-            print(e)
+            logging.error(f"Error on handling ImagePayload with id: {id} and {filename}")
+            logging.error(e)
             image_with_category_payload = {
                 'id': id,
                 'action': 'DELETE'
@@ -67,8 +68,8 @@ if __name__ == "__main__":
     try:
         # Subscribe to a specific topics
         consumer.subscribe(LISTEN_ADDING_NEW_IMAGE_TOPIC)
-        print("Kafka consumer has been successfully started")
-        print(f"Listening bootstrap_servers: {KAFKA_BOOTSTRAP_SERVERS}, topics: {LISTEN_ADDING_NEW_IMAGE_TOPIC}")
+        logging.info("Kafka consumer has been successfully started")
+        logging.info(f"Listening bootstrap_servers: {KAFKA_BOOTSTRAP_SERVERS}, topics: {LISTEN_ADDING_NEW_IMAGE_TOPIC}")
         # Poll for new message
         while True:
             msg = consumer.poll(timeout_ms=1000, max_records=1)
@@ -77,5 +78,5 @@ if __name__ == "__main__":
                     record_value = record[0].value.decode("utf-8")
                     process_image(record_value)
     except Exception as e:
-        print('Error while consuming new message')
-        print(e)
+        logging.error('Error while consuming new message')
+        logging.error(e)

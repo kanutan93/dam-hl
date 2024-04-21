@@ -12,9 +12,6 @@ services:
 
   core-service:
     image: kanutan93/core-service:1.0.1
-    deploy:
-      mode: replicated
-      replicas: 3
     networks:
       - service
     restart: always
@@ -33,13 +30,12 @@ services:
       KAFKA_CONSUMER_GROUP_ID: 'core-service'
       PRODUCE_ADDING_NEW_IMAGE_TOPIC: 'adding-new-image-topic'
       LISTEN_SAVING_NEW_IMAGE_CATEGORY_TOPIC: 'saving-new-image-category-topic'
-      IMAGE_DIRECTORY: '/tmp/images'
+      IMAGE_DIRECTORY: '/opt/images'
+    volumes:
+      - ./docker/images:/opt/images
 
   image-processing-service:
-    image: kanutan93/image-processing-service:1.0.1
-    deploy:
-      mode: replicated
-      replicas: 3
+    image: kanutan93/image-processing-service:1.0.2
     networks:
       - service
     restart: always
@@ -48,7 +44,9 @@ services:
       KAFKA_CONSUMER_GROUP_ID: 'image-processing-service'
       LISTEN_ADDING_NEW_IMAGE_TOPIC: 'adding-new-image-topic'
       PRODUCE_SAVING_NEW_IMAGE_CATEGORY_TOPIC: 'saving-new-image-category-topic'
-      IMAGE_DIRECTORY: '/tmp/images'
+      IMAGE_DIRECTORY: '/opt/images'
+    volumes:
+      - ./docker/images:/opt/images
 
   haproxy:
     image: haproxy
