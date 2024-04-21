@@ -25,7 +25,7 @@ spring:
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29091}
     consumer:
-      group-id: ${KAFKA_CONSUMER_GROUP_ID:images}
+      group-id: ${KAFKA_CONSUMER_GROUP_ID:core-service}
       auto-offset-reset: earliest
 management:
   endpoints.web.exposure.include: prometheus
@@ -34,3 +34,5 @@ management:
 kafka:
   adding-new-image-topic: ${PRODUCE_ADDING_NEW_IMAGE_TOPIC:adding-new-image-topic}
   saving-new-image-category-topic: ${LISTEN_SAVING_NEW_IMAGE_CATEGORY_TOPIC:saving-new-image-category-topic}
+
+image-directory: ${IMAGE_DIRECTORY:/tmp/images}

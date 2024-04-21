@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
 
-  private static final String IMAGES_FOLDER = "/tmp/images/";
   private static final String IMAGES_CACHE = "imagesCache";
   private final ImageRepository imageRepository;
   private final ImageMapper imageMapper;
@@ -43,6 +42,9 @@ public class ImageServiceImpl implements ImageService {
 
   @Value("${kafka.adding-new-image-topic}")
   private String addingNewImageTopic;
+
+  @Value("${image-directory}")
+  private String imageDirectory;
 
   @Override
   @ReadOnlyConnection
@@ -95,7 +97,7 @@ public class ImageServiceImpl implements ImageService {
     log.info("Trying to download image with id: {}", id);
 
     ImageDao image = imageRepository.getImageById(id);
-    File file = new File(IMAGES_FOLDER + image.getFilename());
+    File file = new File(imageDirectory + "/" + image.getFilename());
     FileInputStream inputStream = new FileInputStream(file);
 
     log.info("Image with id: {} has been successfully downloaded", id);
@@ -112,7 +114,7 @@ public class ImageServiceImpl implements ImageService {
 
     int id = imageRepository.createImage(filename);
     try (InputStream inputStream = file.getInputStream();) {
-      File dest = new File(IMAGES_FOLDER + filename);
+      File dest = new File(imageDirectory + "/" + filename);
       FileUtils.copyInputStreamToFile(inputStream, dest);
     }
     ImagePayload imagePayload = new ImagePayload(id, filename);
