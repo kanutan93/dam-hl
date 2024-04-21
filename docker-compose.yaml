@@ -35,7 +35,7 @@ services:
       - ./docker/images:/opt/images
 
   image-processing-service:
-    image: kanutan93/image-processing-service:1.0.3
+    image: kanutan93/image-processing-service:1.0.4
     networks:
       - service
     restart: always

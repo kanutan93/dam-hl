@@ -16,6 +16,7 @@ IMAGE_DIRECTORY = os.getenv("IMAGE_DIRECTORY","/tmp/images")
 
 consumer = KafkaConsumer(
     bootstrap_servers=[KAFKA_BOOTSTRAP_SERVERS],
+    group_id=KAFKA_CONSUMER_GROUP_ID,
     auto_offset_reset='latest'
 )
 producer = KafkaProducer(
