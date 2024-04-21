@@ -14,7 +14,7 @@ public class ImageDaoRowMapper implements RowMapper<ImageDao> {
 
         imageDao.setId(rs.getInt("id"));
         imageDao.setFilename(rs.getString("filename"));
-        imageDao.setCategory(rs.getInt("category"));
+        imageDao.setCategory(rs.getString("category"));
         imageDao.setCategoryMatchResult(rs.getDouble("category_match_result"));
 
         return imageDao;

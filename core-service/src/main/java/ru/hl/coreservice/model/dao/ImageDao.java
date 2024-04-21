@@ -6,6 +6,6 @@ import lombok.Data;
 public class ImageDao {
   private Integer id;
   private String filename;
-  private Integer category;
+  private String category;
   private Double categoryMatchResult;
 }

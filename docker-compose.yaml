@@ -150,6 +150,40 @@ services:
     depends_on:
       - zookeeper
 
+  kafka-2:
+    container_name: kafka-2
+    image: confluentinc/cp-kafka:latest
+    networks:
+      - service
+    restart: always
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2:9092,PLAINTEXT_INTERNAL://localhost:29092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+
+  kafka-3:
+    container_name: kafka-3
+    image: confluentinc/cp-kafka:latest
+    networks:
+      - service
+    restart: always
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-3:9093,PLAINTEXT_INTERNAL://localhost:29093
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+    ports:
+      - "9093:9093"
+      - "29093:29093"
+
   prometheus:
     image: prom/prometheus
     volumes:
