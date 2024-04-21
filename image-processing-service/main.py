@@ -6,6 +6,8 @@ from kafka import KafkaConsumer, KafkaProducer
 from torchvision.io import read_image
 from torchvision.models import resnet50, ResNet50_Weights
 
+logging.basicConfig(level = logging.INFO)
+
 KAFKA_BOOTSTRAP_SERVERS = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "localhost:29091")
 KAFKA_CONSUMER_GROUP_ID = os.getenv("KAFKA_CONSUMER_GROUP_ID", "image-processing-service")
 LISTEN_ADDING_NEW_IMAGE_TOPIC = os.getenv("LISTEN_ADDING_NEW_IMAGE_TOPIC", "adding-new-image-topic")
@@ -67,7 +69,7 @@ def process_image(record_value):
 if __name__ == "__main__":
     try:
         # Subscribe to a specific topics
-        consumer.subscribe(LISTEN_ADDING_NEW_IMAGE_TOPIC)
+        consumer.subscribe([LISTEN_ADDING_NEW_IMAGE_TOPIC])
         logging.info("Kafka consumer has been successfully started")
         logging.info(f"Listening bootstrap_servers: {KAFKA_BOOTSTRAP_SERVERS}, topics: {LISTEN_ADDING_NEW_IMAGE_TOPIC}")
         # Poll for new message
