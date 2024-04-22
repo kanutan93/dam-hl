@@ -2,6 +2,7 @@ package ru.hl.coreservice.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.core.instrument.util.StringUtils;
+import liquibase.repackaged.org.apache.commons.collections4.CollectionUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,8 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static liquibase.repackaged.org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
 @Slf4j
 @Service
@@ -138,6 +141,17 @@ public class ImageServiceImpl implements ImageService {
   public void deleteImage(Integer id) {
     log.info("Trying to delete image with id: {}", id);
 
+    Cache cache = cacheManager.getCache(IMAGES_CACHE);
+    ImageDao image = imageRepository.getImageById(id);
+    String category = image.getCategory();
+    List<ImageResponseDto> imagesFromCache = Optional.ofNullable(cache)
+        .map(it -> it.get(category, List.class))
+        .orElse(null);
+    if (isNotEmpty(imagesFromCache)) {
+      cache.put(category, imagesFromCache.stream()
+          .filter(it -> !id.equals(it.getId()))
+          .collect(Collectors.toList()));
+    }
     imageRepository.deleteImage(id);
 
     log.info("Image with id: {} was successfully deleted", id);

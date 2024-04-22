@@ -1,12 +1,21 @@
 package ru.hl.coreservice.kafka.payload;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ImagePayload {
 
-  private Integer id;
-  private String filename;
+  private final Integer id;
+  private final String filename;
+  private String category;
+  private Double categoryMatchResult;
+  private Action action;
+
+
+  public enum Action {
+    UPDATE,
+    DELETE
+  }
 }

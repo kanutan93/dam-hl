@@ -11,7 +11,7 @@ services:
       - core-service
 
   core-service:
-    image: kanutan93/core-service:1.0.1
+    image: kanutan93/core-service:1.0.3
     networks:
       - service
     restart: always
@@ -35,7 +35,7 @@ services:
       - ./docker/images:/opt/images
 
   image-processing-service:
-    image: kanutan93/image-processing-service:1.0.4
+    image: kanutan93/image-processing-service:1.0.5
     networks:
       - service
     restart: always

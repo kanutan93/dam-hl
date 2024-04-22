@@ -33,7 +33,7 @@ def process_image(record_value):
     id = image_payload['id']
     filename = image_payload['filename']
     if id:
-        image_with_category_payload = {}
+        image_payload = {}
         try:
             logging.info(f"Trying to handle new ImagePayload with id: {id} and {filename}")
             img = read_image(f"{IMAGE_DIRECTORY}/{filename}")
@@ -49,8 +49,9 @@ def process_image(record_value):
             class_id = prediction.argmax().item()
             score = prediction[class_id].item()
             category_name = weights.meta["categories"][class_id]
-            image_with_category_payload = {
+            image_payload = {
                 'id': id,
+                'filename': filename,
                 'category': category_name,
                 'categoryMatchResult': 100 * score,
                 'action': 'UPDATE'
@@ -60,12 +61,12 @@ def process_image(record_value):
         except Exception as e:
             logging.error(f"Error on handling ImagePayload with id: {id} and {filename}")
             logging.error(e)
-            image_with_category_payload = {
+            image_payload = {
                 'id': id,
                 'action': 'DELETE'
             }
         # Step 4: Send ImageWithCategoryPayload to commit or rollback in SAGA
-        producer.send(PRODUCE_SAVING_NEW_IMAGE_CATEGORY_TOPIC, image_with_category_payload)
+        producer.send(PRODUCE_SAVING_NEW_IMAGE_CATEGORY_TOPIC, image_payload)
 
 if __name__ == "__main__":
     try:
