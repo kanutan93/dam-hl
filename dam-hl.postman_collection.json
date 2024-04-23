@@ -28,6 +28,27 @@
 			"response": []
 		},
 		{
+			"name": "Available categories list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/image/categories",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"image",
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Images list with category",
 			"request": {
 				"method": "GET",
@@ -125,6 +146,14 @@
 						"upload"
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "Prometheus",
+			"request": {
+				"method": "GET",
+				"header": []
 			},
 			"response": []
 		}
