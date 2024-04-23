@@ -44,11 +44,13 @@ public class ImageWithCategoryKafkaListener {
     switch (action)  {
       case UPDATE:
         imageService.updateImageCategory(id, category, categoryMatchResult);
-        saveImageToCache(imageMapper.toImageResponseDto(imagePayload));
         break;
       case DELETE:
         imageService.deleteImage(imagePayload.getId());
     }
+
+    Optional.ofNullable(cacheManager.getCache(IMAGES_CACHE))
+        .ifPresent(cache -> cache.evictIfPresent(category));
 
     log.info("Message has been received successfully");
   }

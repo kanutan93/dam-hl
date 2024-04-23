@@ -28,6 +28,12 @@ public class ImageControllerImpl implements ImageController {
   }
 
   @Override
+  public ResponseEntity<List<String>> getCategories() {
+    List<String> categories = imageService.getCategories();
+    return ResponseEntity.ok(categories);
+  }
+
+  @Override
   @SneakyThrows
   public ResponseEntity<InputStreamResource> downloadImage(Integer id) {
     ImageResponseDto image = imageService.getImage(id);

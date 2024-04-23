@@ -3,6 +3,7 @@ package ru.hl.coreservice.repository.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.hl.coreservice.mapper.image.ImageDaoRowMapper;
@@ -10,6 +11,8 @@ import ru.hl.coreservice.model.dao.ImageDao;
 import ru.hl.coreservice.repository.ImageRepository;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
@@ -24,14 +27,21 @@ public class ImageRepositoryImpl implements ImageRepository {
   public List<ImageDao> getImages() {
     return jdbcTemplate.query("SELECT * FROM images " +
             "WHERE category IS NOT NULL " +
+            "ORDER BY id DESC " +
             "LIMIT 1000",
         new ImageDaoRowMapper());
+  }
+
+  @Override
+  public List<String> getCategories() {
+    return jdbcTemplate.query("SELECT DISTINCT(category) FROM images", (rs, rowNum) -> rs.getString("category"));
   }
 
   @Override
   public List<ImageDao> getImagesByCategory(String category) {
     return jdbcTemplate.query("SELECT * FROM images " +
             "WHERE category = ? " +
+            "ORDER BY id DESC " +
             "LIMIT 1000",
         new ImageDaoRowMapper(),
         category);

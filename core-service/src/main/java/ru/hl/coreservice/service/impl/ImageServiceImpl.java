@@ -79,6 +79,16 @@ public class ImageServiceImpl implements ImageService {
   }
 
   @Override
+  public List<String> getCategories() {
+    log.info("Trying to get available categories...");
+
+    List<String> categories = imageRepository.getCategories();
+
+    log.info("{} categories have been receeived succesfully", categories.size());
+    return categories;
+  }
+
+  @Override
   @ReadOnlyConnection
   @Transactional(readOnly = true)
   public ImageResponseDto getImage(Integer id) {
@@ -141,17 +151,6 @@ public class ImageServiceImpl implements ImageService {
   public void deleteImage(Integer id) {
     log.info("Trying to delete image with id: {}", id);
 
-    Cache cache = cacheManager.getCache(IMAGES_CACHE);
-    ImageDao image = imageRepository.getImageById(id);
-    String category = image.getCategory();
-    List<ImageResponseDto> imagesFromCache = Optional.ofNullable(cache)
-        .map(it -> it.get(category, List.class))
-        .orElse(null);
-    if (isNotEmpty(imagesFromCache)) {
-      cache.put(category, imagesFromCache.stream()
-          .filter(it -> !id.equals(it.getId()))
-          .collect(Collectors.toList()));
-    }
     imageRepository.deleteImage(id);
 
     log.info("Image with id: {} was successfully deleted", id);

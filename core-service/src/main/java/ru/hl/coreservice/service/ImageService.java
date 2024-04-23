@@ -13,8 +13,8 @@ public interface ImageService {
 
   List<ImageResponseDto> getImages(String category);
 
-  @ReadOnlyConnection
-  @Transactional(readOnly = true)
+  List<String> getCategories();
+
   ImageResponseDto getImage(Integer id);
 
   InputStream downloadImage(Integer id);

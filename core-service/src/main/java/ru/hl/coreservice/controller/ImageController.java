@@ -19,6 +19,9 @@ public interface ImageController {
   @GetMapping("/list")
   ResponseEntity<List<ImageResponseDto>> getImages(@RequestParam(required = false) String category);
 
+  @GetMapping("/categories")
+  ResponseEntity<List<String>> getCategories();
+
   @GetMapping("/download/{id}")
   ResponseEntity<InputStreamResource> downloadImage(@PathVariable Integer id);
 

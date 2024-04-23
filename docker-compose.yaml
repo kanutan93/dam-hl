@@ -14,7 +14,7 @@ services:
 
   core-service-1:
     container_name: core-service-1
-    image: kanutan93/core-service:1.0.3
+    image: kanutan93/core-service:1.0.4
     networks:
       - service
     env_file:
@@ -24,7 +24,7 @@ services:
 
   core-service-2:
     container_name: core-service-2
-    image: kanutan93/core-service:1.0.3
+    image: kanutan93/core-service:1.0.4
     networks:
       - service
     env_file:
@@ -34,7 +34,7 @@ services:
 
   core-service-3:
     container_name: core-service-3
-    image: kanutan93/core-service:1.0.3
+    image: kanutan93/core-service:1.0.4
     networks:
       - service
     env_file:

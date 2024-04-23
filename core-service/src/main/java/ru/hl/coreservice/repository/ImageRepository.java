@@ -8,6 +8,7 @@ import java.util.List;
 public interface ImageRepository {
 
     List<ImageDao> getImages();
+    List<String> getCategories();
     List<ImageDao> getImagesByCategory(String category);
     ImageDao getImageById(Integer id);
     int createImage(String filename);
