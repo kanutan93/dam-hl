@@ -5,6 +5,7 @@ import os
 from kafka import KafkaConsumer, KafkaProducer
 from torchvision.io import read_image
 from torchvision.models import resnet50, ResNet50_Weights
+from prometheus_client import start_http_server, Summary
 
 logging.basicConfig(level = logging.INFO)
 
@@ -13,6 +14,7 @@ KAFKA_CONSUMER_GROUP_ID = os.getenv("KAFKA_CONSUMER_GROUP_ID", "image-processing
 LISTEN_ADDING_NEW_IMAGE_TOPIC = os.getenv("LISTEN_ADDING_NEW_IMAGE_TOPIC", "adding-new-image-topic")
 PRODUCE_SAVING_NEW_IMAGE_CATEGORY_TOPIC = os.getenv("PRODUCE_SAVING_NEW_IMAGE_CATEGORY_TOPIC", "saving-new-image-category-topic")
 IMAGE_DIRECTORY = os.getenv("IMAGE_DIRECTORY","/tmp/images")
+IMAGE_PROCESS_TIME = Summary('image_processing_seconds', 'Time spent processing')
 
 consumer = KafkaConsumer(
     bootstrap_servers=[KAFKA_BOOTSTRAP_SERVERS],
@@ -28,6 +30,7 @@ weights = ResNet50_Weights.DEFAULT
 model = resnet50(weights=weights)
 model.eval()
 
+@IMAGE_PROCESS_TIME.time()
 def process_image(record_value):
     image_payload = json.loads(record_value)
     id = image_payload['id']
@@ -69,6 +72,7 @@ def process_image(record_value):
         producer.send(PRODUCE_SAVING_NEW_IMAGE_CATEGORY_TOPIC, image_payload)
 
 if __name__ == "__main__":
+    start_http_server(9309)
     try:
         # Subscribe to a specific topics
         consumer.subscribe([LISTEN_ADDING_NEW_IMAGE_TOPIC])

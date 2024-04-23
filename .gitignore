@@ -45,4 +45,5 @@ docker/
 !docker/postgres/db-slave2/pg_hba.conf
 !docker/postgres/db-slave2/postgresql.conf
 !docker/postgres/db-slave2/standby.signal
+!docker/env/
 

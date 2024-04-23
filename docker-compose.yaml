@@ -8,43 +8,70 @@ services:
     networks:
       - service
     depends_on:
-      - core-service
+      - core-service-1
+      - core-service-2
+      - core-service-3
 
-  core-service:
+  core-service-1:
+    container_name: core-service-1
     image: kanutan93/core-service:1.0.3
     networks:
       - service
-    restart: always
-    environment:
-      MASTER_DB_URL: 'jdbc:postgresql://pg-master:5432/dam'
-      MASTER_DB_USER: 'dam_user'
-      MASTER_DB_PASSWORD: 'password'
-      READ_ONLY_SLAVE_ENABLED: 'true'
-      SLAVE_DB_URL: 'jdbc:postgresql://haproxy:5000/dam'
-      SLAVE_DB_USER: 'dam_user'
-      SLAVE_DB_PASSWORD: 'password'
-      REDIS_HOST: 'redis'
-      REDIS_PORT: '6379'
-      REDIS_PASSWORD: 'password'
-      KAFKA_BOOTSTRAP_SERVERS: 'kafka:9091'
-      KAFKA_CONSUMER_GROUP_ID: 'core-service'
-      PRODUCE_ADDING_NEW_IMAGE_TOPIC: 'adding-new-image-topic'
-      LISTEN_SAVING_NEW_IMAGE_CATEGORY_TOPIC: 'saving-new-image-category-topic'
-      IMAGE_DIRECTORY: '/opt/images'
+    env_file:
+      - ./docker/env/core-service.env
     volumes:
       - ./docker/images:/opt/images
 
-  image-processing-service:
-    image: kanutan93/image-processing-service:1.0.5
+  core-service-2:
+    container_name: core-service-2
+    image: kanutan93/core-service:1.0.3
+    networks:
+      - service
+    env_file:
+      - ./docker/env/core-service.env
+    volumes:
+      - ./docker/images:/opt/images
+
+  core-service-3:
+    container_name: core-service-3
+    image: kanutan93/core-service:1.0.3
+    networks:
+      - service
+    env_file:
+      - ./docker/env/core-service.env
+    volumes:
+      - ./docker/images:/opt/images
+
+  image-processing-service-1:
+    container_name: image-processing-service-1
+    image: kanutan93/image-processing-service:1.0.8
     networks:
       - service
     restart: always
-    environment:
-      KAFKA_BOOTSTRAP_SERVERS: 'kafka:9091'
-      KAFKA_CONSUMER_GROUP_ID: 'image-processing-service'
-      LISTEN_ADDING_NEW_IMAGE_TOPIC: 'adding-new-image-topic'
-      PRODUCE_SAVING_NEW_IMAGE_CATEGORY_TOPIC: 'saving-new-image-category-topic'
-      IMAGE_DIRECTORY: '/opt/images'
+    env_file:
+      - ./docker/env/image-processing-service.env
+    volumes:
+      - ./docker/images:/opt/images
+
+  image-processing-service-2:
+    container_name: image-processing-service-2
+    image: kanutan93/image-processing-service:1.0.8
+    networks:
+      - service
+    restart: always
+    env_file:
+      - ./docker/env/image-processing-service.env
+    volumes:
+      - ./docker/images:/opt/images
+
+  image-processing-service-3:
+    container_name: image-processing-service-3
+    image: kanutan93/image-processing-service:1.0.8
+    networks:
+      - service
+    restart: always
+    env_file:
+      - ./docker/env/image-processing-service.env
     volumes:
       - ./docker/images:/opt/images
 
@@ -182,29 +209,38 @@ services:
       - "9093:9093"
       - "29093:29093"
 
+  kafka-exporter:
+    container_name: kafka-exporter
+    image: danielqsj/kafka-exporter
+    networks:
+      - service
+    command: [ "--kafka.server=kafka:9092", "--kafka.server=kafka-2:9092", "--kafka.server=kafka-3:9092" ]
+    ports:
+      - "9308:9308"
+    depends_on:
+      - kafka
+      - kafka-2
+      - kafka-3
+
   prometheus:
     image: prom/prometheus
     volumes:
-      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+      - "./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
     networks:
-      - monitoring
       - service
     ports:
       - '9090:9090'
 
   grafana:
-    container_name: grafana
     image: grafana/grafana
     networks:
-      - monitoring
+      - service
     restart: always
     ports:
       - '3000:3000'
 
 networks:
   service:
-    driver: bridge
-  monitoring:
     driver: bridge
 
 volumes:
